@@ -1,0 +1,34 @@
+{
+    "Cluster 0": {
+        "name": "Miłośnicy Psów nad Wodą",
+        "description": "W tym klastrze znajdują się osoby, które preferują psy jako ulubione zwierzęta i lubią spędzać czas nad wodą. Większość z nich to mężczyźni w wieku 35-44 lat z wyższym wykształceniem."
+    },
+    "Cluster 1": {
+        "name": "Górscy Entuzjaści Psów",
+        "description": "W tym klastrze znajdują się osoby, które preferują psy i uwielbiają spędzać czas w górach. Są to głównie mężczyźni w wieku 45-54 lat z wyższym wykształceniem."
+    },
+    "Cluster 2": {
+        "name": "Kociarze Górscy",
+        "description": "W tym klastrze znajdują się osoby, które preferują koty i lubią spędzać czas w górach. Większość z nich to mężczyźni w wieku 35-44 lat z wyższym wykształceniem."
+    },
+    "Cluster 3": {
+        "name": "Leśni Miłośnicy Psów",
+        "description": "W tym klastrze znajdują się osoby, które preferują psy i uwielbiają spędzać czas w lesie. Są to głównie mężczyźni w wieku 45-54 lat z wyższym wykształceniem."
+    },
+    "Cluster 4": {
+        "name": "Górscy Miłośnicy Kotów",
+        "description": "W tym klastrze znajdują się osoby, które preferują koty i lubią spędzać czas w górach. Większość z nich to mężczyźni w wieku 45-54 lat ze średnim wykształceniem."
+    },
+    "Cluster 5": {
+        "name": "Nadwodni Miłośnicy Kotów",
+        "description": "W tym klastrze znajdują się osoby, które preferują koty i lubią spędzać czas nad wodą. Większość z nich to mężczyźni w wieku 35-44 lat z wyższym wykształceniem."
+    },
+    "Cluster 6": {
+        "name": "Nadwodni Miłośnicy Psów",
+        "description": "W tym klastrze znajdują się osoby, które preferują psy i lubią spędzać czas nad wodą. Są to głównie mężczyźni w wieku 45-54 lat z wyższym wykształceniem."
+    },
+    "Cluster 7": {
+        "name": "Nadwodni Miłośnicy Psów ze Średnim Wykształceniem",
+        "description": "W tym klastrze znajdują się osoby, które preferują psy i lubią spędzać czas nad wodą. Większość z nich to mężczyźni w wieku 35-44 lat ze średnim wykształceniem."
+    }
+}
