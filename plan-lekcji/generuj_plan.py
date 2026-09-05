@@ -14,10 +14,10 @@ SLOTS = [
     (5, "11:50", "12:35"),
     (6, "12:45", "13:30"),
     (7, "13:40", "14:25"),
-    (8, "14:35", "15:20"),
-    (9, "15:30", "16:15"),
-    (10, "16:25", "17:10"),
 ]
+
+# popołudnie: co 30 minut od pełnej godziny, ostatnie zajęcia o 19:30
+AFTERNOON = [f"{h}:{m:02d}" for h in range(14, 20) for m in (0, 30) if (h, m) >= (14, 30)]
 
 DAYS = ["Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek"]
 
@@ -162,6 +162,10 @@ def build_html():
             f'<tr><th class="time"><span class="nr">{nr}</span>'
             f'<span class="hrs">{start}<br>{stop}</span></th>{"".join(tds)}</tr>'
         )
+    for i, t in enumerate(AFTERNOON):
+        cls = "pm first" if i == 0 else "pm"
+        tds = "".join(f'<td class="free {who} {cls}"></td>' for _ in DAYS for who in ("m", "g"))
+        rows.append(f'<tr class="{cls}"><th class="time {cls}"><span class="pmt">{t}</span></th>{tds}</tr>')
 
     legend_items = [
         ("Edukacja wczesnoszkolna", "EW"),
@@ -180,14 +184,15 @@ def build_html():
 <html lang="pl"><head><meta charset="utf-8">
 <title>Plan lekcji – Mieszko i Gucio</title>
 <style>
-@page {{ size: A4 landscape; margin: 7mm 8mm; }}
+@page {{ size: A4 landscape; margin: 5mm 7mm; }}
 * {{ box-sizing: border-box; }}
 html, body {{ margin: 0; padding: 0; }}
 body {{ font-family: "Liberation Sans", "DejaVu Sans", Arial, sans-serif; color: #222; font-size: 8.4pt; }}
-header {{ display: flex; align-items: baseline; justify-content: space-between; margin: 0 0 3mm; }}
-h1 {{ font-size: 16pt; margin: 0; letter-spacing: .2px; }}
+header {{ display: flex; align-items: baseline; justify-content: space-between; margin: 0 0 2mm; }}
+h1 {{ font-size: 14pt; margin: 0; letter-spacing: .2px; }}
 h1 span {{ font-weight: normal; color: #666; font-size: 10pt; margin-left: 6px; }}
 .note {{ font-size: 8pt; color: #555; }}
+.note b {{ color: #2f3e55; }}
 table {{ width: 100%; border-collapse: collapse; table-layout: fixed; }}
 th, td {{ border: 1px solid #b9b9b9; padding: 0; vertical-align: middle; text-align: center; }}
 th.day {{ background: #2f3e55; color: #fff; font-size: 11pt; padding: 1.6mm 0; }}
@@ -199,12 +204,17 @@ th.end {{ font-size: 6.6pt; font-weight: normal; color: #444; padding: .6mm 0; b
 th.time {{ width: 14mm; background: #f1f3f6; padding: 0; }}
 th.time .nr {{ display: block; font-size: 10.5pt; }}
 th.time .hrs {{ display: block; font-size: 6.6pt; font-weight: normal; color: #555; line-height: 1.2; }}
-td {{ height: 15.4mm; }}
+td {{ height: 11.6mm; }}
+tr.pm td {{ height: 7.4mm; }}
 td.lesson .subj {{ display: block; font-weight: bold; font-size: 8.4pt; line-height: 1.15; padding: 0 1mm; }}
 td.lesson .room {{ display: block; font-size: 6.6pt; color: #555; margin-top: .5mm; }}
-td.free {{ background: #fff; background-image: repeating-linear-gradient(0deg, transparent, transparent 14.4mm, #e3e3e3 14.4mm, #e3e3e3 15.4mm); border-style: dashed; border-color: #cfcfcf; }}
+td.free {{ background: #fff; border-style: dashed; border-color: #cfcfcf; }}
+tr.pm td.free {{ border-style: solid; border-color: #d6d6d6; }}
+tr.pm th.time {{ background: #f7f8fa; }}
+th.time .pmt {{ display: block; font-size: 8pt; font-weight: bold; color: #333; }}
+.first {{ border-top: 2px solid #2f3e55 !important; }}
 td.free.m {{ border-right-style: solid; }}
-footer {{ display: flex; justify-content: space-between; align-items: center; margin-top: 2.6mm; font-size: 7.4pt; color: #444; gap: 4mm; }}
+footer {{ display: flex; justify-content: space-between; align-items: center; margin-top: 1.8mm; font-size: 7.4pt; color: #444; gap: 4mm; }}
 .legend {{ display: flex; flex-wrap: wrap; gap: 1.2mm 4mm; }}
 .lg i {{ display: inline-block; width: 3mm; height: 3mm; border: 1px solid #aaa; vertical-align: -0.5mm; margin-right: 1.2mm; }}
 .lg small {{ color: #777; }}
@@ -214,7 +224,7 @@ footer {{ display: flex; justify-content: space-between; align-items: center; ma
 <body>
 <header>
   <h1>Plan lekcji <span>Mieszko (5b) &amp; Gucio (klasa 1) · rok szkolny 2026/2027</span></h1>
-  <div class="note">Puste pola po lekcjach = miejsce na zajęcia dodatkowe (do wpisania ręcznie)</div>
+  <div class="note">Po lekcjach siatka co 30 min (14:30–19:30) na <b>zajęcia dodatkowe</b> – do wpisania ręcznie</div>
 </header>
 <table>
   <thead>
