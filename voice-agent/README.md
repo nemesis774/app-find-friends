@@ -85,3 +85,69 @@ python -m unittest tests.test_claude_runner -v
 - **Nic nie słychać** – sprawdź przełącznik wyciszenia iPhone'a; Safari odtwarza dźwięk dopiero po dotknięciu strony.
 - **Długa pierwsza odpowiedź** – model Whisper ładuje się przy starcie (`WHISPER_WARM_UP=0` to wyłącza).
 - **„Nie znaleziono programu claude”** – zainstaluj Claude Code lub podaj ścieżkę w `CLAUDE_BIN`.
+
+## Uruchomienie w chmurze (VPS) – krok po kroku
+
+Zamiast własnego komputera agent może działać na tanim serwerze w chmurze. Wtedy działa
+cały czas, a iPhone łączy się z nim z dowolnego miejsca.
+
+**Czego potrzebujesz:** serwer VPS z Ubuntu, 2 vCPU i 4 GB RAM (np. Hetzner, OVH,
+Mikr.us), ok. 20–30 zł miesięcznie. Przy zakupie dostaniesz publiczny adres IP i dostęp
+SSH (hasło albo klucz).
+
+**1. Połącz się z serwerem** (z Maca: aplikacja Terminal, z Windows: PowerShell):
+
+```bash
+ssh root@TWOJ_ADRES_IP
+```
+
+**2. Zainstaluj Dockera i pobierz projekt:**
+
+```bash
+curl -fsSL https://get.docker.com | sh
+apt-get install -y git
+git clone -b feat/voice-agent https://github.com/nemesis774/app-find-friends.git
+cd app-find-friends/voice-agent
+```
+
+**3. Ustaw adres i hasło dostępu:**
+
+```bash
+cp .env.example .env
+nano .env
+```
+
+W pliku wpisz `DOMAIN` (bez własnej domeny: IP z myślnikami zamiast kropek plus `.sslip.io`,
+np. `203-0-113-10.sslip.io`) i własne `VOICE_AGENT_TOKEN`. Zapisz: Ctrl+O, Enter, Ctrl+X.
+
+**4. Zbuduj i uruchom** (pierwszy raz kilka minut):
+
+```bash
+docker compose up -d --build
+docker compose logs -f agent      # poczekaj na "Model Whisper gotowy", wyjście: Ctrl+C
+```
+
+**5. Zaloguj Claude Code na serwerze** swoim kontem (subskrypcją):
+
+```bash
+docker compose exec agent claude
+```
+
+Wybierz logowanie przez konto Claude. Claude Code wypisze link – otwórz go na telefonie
+lub komputerze, zaloguj się, skopiuj kod i wklej w terminalu. Potem wpisz `/exit`.
+Login zapisuje się na woluminie, więc przetrwa restarty. Alternatywa bez logowania:
+wpisz `ANTHROPIC_API_KEY` w `.env` (płatność za użycie) i zrób `docker compose up -d`.
+
+**6. Otwórz na iPhonie:** `https://TWOJA_DOMENA/?token=TWOJ_TOKEN`, np.
+`https://203-0-113-10.sslip.io/?token=...`. Zgódź się na mikrofon i mów.
+
+**Aktualizacja po zmianach w kodzie:**
+
+```bash
+cd app-find-friends/voice-agent && git pull && docker compose up -d --build
+```
+
+**Uwagi:**
+- Claude Code na serwerze pracuje w katalogu `work/` obok projektu, nie widzi plików z Twojego komputera.
+- Adres jest publiczny, więc token jest jedyną ochroną. Używaj długiego hasła i nie włączaj trybu `bypassPermissions`.
+- Porty 80 i 443 muszą być otwarte w firewallu serwera (u większości dostawców są domyślnie).

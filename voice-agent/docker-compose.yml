@@ -1,0 +1,28 @@
+services:
+  agent:
+    build: .
+    restart: unless-stopped
+    env_file: .env            # VOICE_AGENT_TOKEN i opcje Claude/Whisper
+    volumes:
+      - data:/data            # login Claude Code + pobrane modele Whisper
+      - ./work:/work          # katalog, w którym pracuje Claude Code
+    expose:
+      - "8000"
+
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - DOMAIN=${DOMAIN:?Ustaw DOMAIN w pliku .env, np. 1-2-3-4.sslip.io}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+    depends_on:
+      - agent
+
+volumes:
+  data:
+  caddy_data:

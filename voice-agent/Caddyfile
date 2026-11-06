@@ -1,0 +1,4 @@
+# Caddy sam pobiera i odnawia certyfikat HTTPS (Let's Encrypt) dla domeny z .env.
+{$DOMAIN} {
+    reverse_proxy agent:8000
+}
